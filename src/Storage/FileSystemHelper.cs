@@ -6,7 +6,7 @@ namespace Storage.Helpers
 {
     public static class FileSystemHelper
     {
-        public static bool DoFilesMatch(string full_source_filename, string full_dest_filename, bool check_filesize_only = false) //source_folder, string dest_folder)
+        public static bool DoFilesMatch(string full_source_filename, string full_dest_filename, bool check_filesize_only = false)
         {
             if (!File.Exists(full_source_filename) || !File.Exists(full_dest_filename))
                 return false;
@@ -15,7 +15,7 @@ namespace Storage.Helpers
             return FileCompareHelper.AreFilesEqual(fi1, fi2, check_filesize_only);
         }
 
-        public static void RemoveFile(string filename)//, string dest, bool use_recycle_bin = false)
+        public static void RemoveFile(string filename)///, bool use_recycle_bin = false)
         {
             if (!File.Exists(filename))
                 return;
@@ -29,7 +29,7 @@ namespace Storage.Helpers
             File.Copy(source_file, dest_file, overwrite);
         }
 
-        public static void DeleteFolder(string folder)//, string dest, bool use_recycle_bin = false)
+        public static void DeleteFolder(string folder)//, bool use_recycle_bin = false)
         {
             var root = Path.GetPathRoot(folder);
             if (!Directory.Exists(folder))
@@ -39,7 +39,6 @@ namespace Storage.Helpers
             foreach (var file in di.GetFiles("*", SearchOption.AllDirectories))
                 file.Attributes &= ~FileAttributes.ReadOnly;
             Directory.Delete(folder, true);
-  
         }
 
         public static bool CopyFolder(string source, string dest, bool fail_on_dest_existing = true)

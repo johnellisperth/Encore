@@ -1,3 +1,4 @@
+using Encore.Helpers;
 using Encore.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,22 +10,17 @@ namespace Encore
 {
     static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            // Application.Run(new FormMain());
+
             var builder = new HostBuilder()
                .ConfigureServices((hostContext, services) =>
                {
-                   services.AddScoped<FormMain>();
-                   services.AddScoped<BackupService>();
-
+                 
                    //Add Serilog
                    var serilogLogger = new LoggerConfiguration()
                            //.WriteTo.File("C:\\logs\\TheCodeBuzz.txt")
@@ -35,6 +31,13 @@ namespace Encore
                        x.AddSerilog(logger: serilogLogger, dispose: true);
                    });
 
+                   services.AddScoped<IProgress<int>, Progress<int>>();
+                   services.AddScoped<ProgressManager>();
+                   services.AddScoped<SafeFileSystemHelper>();
+                   services.AddScoped<SourceDestComparison>();
+                   services.AddScoped<BackupService>();
+                   services.AddScoped<FormMain>();
+
                });
 
             var host = builder.Build();
@@ -44,10 +47,8 @@ namespace Encore
                 var services = serviceScope.ServiceProvider;
                 try
                 {
-                    var form1 = services.GetRequiredService<FormMain>();
-                    Application.Run(form1);
-
-                    Console.WriteLine("Success");
+                    var form_main = services.GetRequiredService<FormMain>();
+                    Application.Run(form_main);
                 }
                 catch (Exception ex)
                 {

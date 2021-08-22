@@ -1,10 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Encore.Helpers;
 using Encore.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using RemoveDuplicateFiles.Services;
 using Storage.Helpers;
 
 namespace Encore.Services
@@ -17,10 +13,10 @@ namespace Encore.Services
         public string Source { get; set; }
         public string Dest { get; set; }
         private readonly ILogger Log_;
-        public BackupService(ILogger<BackupService> logger)
+        public BackupService(ILogger<BackupService> logger, SourceDestComparison source_dest_comparison)
         {
             Log_ = logger;
-            
+            LastSourceDestComparison = source_dest_comparison;
             foreach (var drive in UserFileSystem.PCDriveList)
                 DriveList.Add(new DriveSettings()
                 {
@@ -32,7 +28,7 @@ namespace Encore.Services
 
         public List<string> Drives => DriveList.Select(d => d.DriveLetter).ToList();
 
-        public DriveSettings GetDriveSettings(string drive) =>   DriveList.FirstOrDefault(d => 
+        public DriveSettings GetDriveSettings(string drive) =>  DriveList.FirstOrDefault(d => 
         string.Equals(drive, d.DriveLetter) && 
         !string.IsNullOrEmpty(d.BackupDrive) && 
         !string.Equals(d.DriveLetter, d.BackupDrive));//backup drive must be different and set
@@ -63,7 +59,7 @@ namespace Encore.Services
         {
             string preview_string = preview ? "preview " : "";
             Log_.LogInformation($"Performing backup {preview_string}of {Source} onto {Dest}");
-            LastSourceDestComparison = new (Source, Dest, progress_manager, Log_);
+            LastSourceDestComparison.SetSourceDest(Source, Dest);
             await Task.Run(() => LastSourceDestComparison.PerformEcho(preview));
             Log_.LogInformation($"Finsihed performing backup {preview_string}of {Source} onto {Dest}");
         }

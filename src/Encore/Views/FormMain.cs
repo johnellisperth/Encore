@@ -1,4 +1,5 @@
-﻿using Encore.Models;
+﻿using Encore.Helpers;
+using Encore.Models;
 using Encore.Services;
 using System.Windows.Forms;
 
@@ -7,31 +8,27 @@ namespace Encore
     public partial class FormMain : Form
     {
         BackupService BackupService_;
-        public FormMain(BackupService backup_service)
+        ProgressManager ProgressManager_;
+        public FormMain(BackupService backup_service, ProgressManager progress_manager)
         {
             InitializeComponent();
-
             BackupService_ = backup_service;
-
+            ProgressManager_ = progress_manager;
             comboBoxDrive.DataSource = BackupService_.Drives;
             comboBoxBackup.DataSource = BackupService_.Drives;
-            comboBoxDrive.Text = "F:\\";
         }
 
         private async void buttonFind_Click(object sender, EventArgs e)
         {
-            string error_message = default;
+            string error_message = "";
             try
             {
                 //var drive = BackupService_.GetDriveSettings(comboBoxDrive.Text);
                // if (drive?.PerformDriveValidation(out error_message) == true)//to move to backupservice
                 {
                     progressBar1.Value = 0;
-                    var progress = new Progress<int>(percent =>
-                    {
-                        progressBar1.Value = Math.Min(percent,100);
+                    var progress = new Progress<int>(percent => progressBar1.Value = Math.Min(percent, 100));
 
-                    });
                     await BackupService_.PerformPreviewOrBackupAsync(new Helpers.ProgressManager(progress, 25), true);
                    
                     BackupService_.GetResults(true,

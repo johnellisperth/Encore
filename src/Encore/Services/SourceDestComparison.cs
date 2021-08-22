@@ -2,33 +2,37 @@
 using Encore.Models;
 using Microsoft.Extensions.Logging;
 using Storage.Helpers;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 
-namespace RemoveDuplicateFiles.Services
+namespace Encore.Services
 {
     public class SourceDestComparison : INotifyPropertyChanged
     {
-        public string Source { get; }
-        public string Dest { get; }
+        public string Source { get; private set; }
+        public string Dest { get; private set; }
         public List<FoldersPair> LonelySourceFolders { get; private set; }
         public List<FoldersPair> LonelyDestFolders { get; private set; }
         public List<FilesPair> DiffSourceFiles { get; private set; }
         public List<FilesPair> DiffDestFiles { get; private set; }
 
-        private readonly SafeFileSystemHelper SafeFileHelper_ = new();
-
+        private readonly SafeFileSystemHelper SafeFileHelper_ ;
         private readonly ILogger Log_;
         private ProgressManager ProgressManager_;
-        public SourceDestComparison(string source_folder, string dest_folder, ProgressManager progress_manager, ILogger logger)
+
+       
+        public SourceDestComparison(ProgressManager progress_manager, ILogger<SourceDestComparison> logger, SafeFileSystemHelper safe_file_helper)
+        {
+            Log_ = logger;
+            ProgressManager_ = progress_manager;
+            ProgressManager_ = progress_manager;
+            SafeFileHelper_ = safe_file_helper;
+        }
+
+        public void SetSourceDest(string source_folder, string dest_folder)
         {
             Source = source_folder;
             Dest = dest_folder;
             SafeFileHelper_.EditableDrive = dest_folder;
-            Log_ = logger;
-            ProgressManager_ = progress_manager;
-
         }
 
         private void DetermineDiffSourceFiles()
