@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace Storage.Helpers
+namespace Storage
 {
     public static class UserFileSystem
     {

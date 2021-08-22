@@ -1,7 +1,8 @@
 ﻿using Encore.Helpers;
 using Encore.Models;
+using Encore.Validation;
 using Microsoft.Extensions.Logging;
-using Storage.Helpers;
+using Storage;
 using System.ComponentModel;
 
 namespace Encore.Services
@@ -18,14 +19,16 @@ namespace Encore.Services
         private readonly SafeFileSystemHelper SafeFileHelper_ ;
         private readonly ILogger Log_;
         private ProgressManager ProgressManager_;
+        
 
-       
-        public SourceDestComparison(ProgressManager progress_manager, ILogger<SourceDestComparison> logger, SafeFileSystemHelper safe_file_helper)
+        public SourceDestComparison(ProgressManager progress_manager, ILogger<SourceDestComparison> logger,
+            SafeFileSystemHelper safe_file_helper)
         {
             Log_ = logger;
             ProgressManager_ = progress_manager;
             ProgressManager_ = progress_manager;
             SafeFileHelper_ = safe_file_helper;
+           
         }
 
         public void SetSourceDest(string source_folder, string dest_folder)

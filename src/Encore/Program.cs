@@ -1,9 +1,11 @@
 using Encore.Helpers;
 using Encore.Services;
+using Encore.Validation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Storage;
 using System.Windows.Forms;
 
 namespace Encore
@@ -33,6 +35,7 @@ namespace Encore
 
                    services.AddScoped<IProgress<int>, Progress<int>>();
                    services.AddScoped<ProgressManager>();
+                   services.AddScoped<SourceDestValidator>();
                    services.AddScoped<SafeFileSystemHelper>();
                    services.AddScoped<SourceDestComparison>();
                    services.AddScoped<BackupService>();

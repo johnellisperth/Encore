@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Storage.Helpers
+namespace Storage
 {
     public static class FileCompareHelper
     {
-        public static List<string> GetAllFolders(string folder) => Directory.EnumerateDirectories(folder, "*", new EnumerationOptions
+        public static IEnumerable<string> GetAllFolders(string folder) => Directory.EnumerateDirectories(folder, "*", new EnumerationOptions
         {
             IgnoreInaccessible = true,
             RecurseSubdirectories = true
 
-        }).ToList();
-        public static List<string> GetAllFiles(string folder) => Directory.EnumerateFiles(folder, "*.*", new EnumerationOptions
+        });
+
+        public static IEnumerable<string> GetAllFiles(string folder) => Directory.EnumerateFiles(folder, "*.*", new EnumerationOptions
         {
             IgnoreInaccessible = true,
             RecurseSubdirectories = true
-        }).ToList();
-        public static string NoDriveFilename(string filename) => filename.Remove(0, 2);
+        });
+
+        public static string NoDriveFilename(string filename) => filename?.Length>2 ? filename.Remove(0, 2) : string.Empty;
         public static string DiffDriveFilename(string drive, string filename) => drive + NoDriveFilename(filename);
 
         public static bool AreFilesEqual(FileInfo fi1, FileInfo fi2, bool check_filesize_only = false)

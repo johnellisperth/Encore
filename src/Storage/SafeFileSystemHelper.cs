@@ -1,12 +1,5 @@
-﻿using Storage.Helpers;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Encore.Helpers
+﻿
+namespace Storage
 {
     public class SafeFileSystemHelper
     {

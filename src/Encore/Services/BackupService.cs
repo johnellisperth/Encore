@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Encore.Helpers;
 using Encore.Models;
-using Storage.Helpers;
+using Storage;
+using Encore.Validation;
 
 namespace Encore.Services
 {
@@ -9,14 +10,15 @@ namespace Encore.Services
     {
         public List<DriveSettings> DriveList { get; set; } = new List<DriveSettings>();
         public SourceDestComparison LastSourceDestComparison { get; private set; }
-
+        private readonly SourceDestValidator Validator_;
         public string Source { get; set; }
         public string Dest { get; set; }
         private readonly ILogger Log_;
-        public BackupService(ILogger<BackupService> logger, SourceDestComparison source_dest_comparison)
+        public BackupService(ILogger<BackupService> logger, SourceDestComparison source_dest_comparison, SourceDestValidator validator)
         {
             Log_ = logger;
             LastSourceDestComparison = source_dest_comparison;
+            Validator_ = validator;
             foreach (var drive in UserFileSystem.PCDriveList)
                 DriveList.Add(new DriveSettings()
                 {
@@ -28,11 +30,11 @@ namespace Encore.Services
 
         public List<string> Drives => DriveList.Select(d => d.DriveLetter).ToList();
 
-        public DriveSettings GetDriveSettings(string drive) =>  DriveList.FirstOrDefault(d => 
+      /*  public DriveSettings GetDriveSettings(string drive) =>  DriveList.FirstOrDefault(d => 
         string.Equals(drive, d.DriveLetter) && 
         !string.IsNullOrEmpty(d.BackupDrive) && 
         !string.Equals(d.DriveLetter, d.BackupDrive));//backup drive must be different and set
-
+      */
         public void GetResults(bool preview,
              out List<FilesPair> diff_files_found,
             out List<FoldersPair> diff_folders_found,
@@ -55,6 +57,15 @@ namespace Encore.Services
             Log_.LogInformation(message);
         }
 
+        public ValidationResult PerformValidation()
+        {
+            var result = Validator_.IsSourceDestValid(Source, Dest);
+            if (!result.IsValid)
+                Log_.LogInformation(result.Message);
+
+            return result;
+        }
+     
         public async Task PerformPreviewOrBackupAsync(ProgressManager progress_manager, bool preview)
         {
             string preview_string = preview ? "preview " : "";

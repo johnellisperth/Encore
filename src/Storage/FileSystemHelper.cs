@@ -1,8 +1,6 @@
 ﻿
-using System.IO;
 
-
-namespace Storage.Helpers
+namespace Storage
 {
     public static class FileSystemHelper
     {
