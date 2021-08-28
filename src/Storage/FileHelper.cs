@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿
 
 namespace Storage
 {
@@ -20,9 +17,10 @@ namespace Storage
             RecurseSubdirectories = true
         });
 
-        public static string NoDriveFilename(string filename) => filename?.Length>2 ? filename.Remove(0, 2) : string.Empty;
+        public static string NoDriveFilename(string filename) => filename?.Length > 2 ? filename.Remove(0, 2) : string.Empty;
         public static string DiffDriveFilename(string drive, string filename) => drive + NoDriveFilename(filename);
 
+        
         public static bool AreFilesEqual(FileInfo fi1, FileInfo fi2, bool check_filesize_only = false)
         {
             if (fi1.Length != fi2.Length) return false;
@@ -72,8 +70,30 @@ namespace Storage
         }
         private static long GetFilesize(string filename) => File.Exists(filename) ? new FileInfo(filename).Length : 0;
 
-    }
+        
+        //https://stackoverflow.com/questions/876473/is-there-a-way-to-check-if-a-file-is-in-use
+        public static bool IsFileLocked(FileInfo file)
+        {
+            try
+            {
+                using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    stream.Close();
+                }
+            }
+            catch (IOException)
+            {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
 
+            //file is not locked
+            return false;
+        }
+    }
 
 }
 

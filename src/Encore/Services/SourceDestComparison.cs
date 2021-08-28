@@ -1,6 +1,5 @@
 ﻿using Encore.Helpers;
 using Encore.Models;
-using Encore.Validation;
 using Microsoft.Extensions.Logging;
 using Storage;
 using System.ComponentModel;
@@ -28,7 +27,6 @@ namespace Encore.Services
             ProgressManager_ = progress_manager;
             ProgressManager_ = progress_manager;
             SafeFileHelper_ = safe_file_helper;
-           
         }
 
         public void SetSourceDest(string source_folder, string dest_folder)
@@ -36,6 +34,55 @@ namespace Encore.Services
             Source = source_folder;
             Dest = dest_folder;
             SafeFileHelper_.EditableDrive = dest_folder;
+        }
+
+        public bool PerformEcho(bool preview)
+        {
+            try
+            {
+                if (preview)
+                    PerformPreviewComparison();
+                else
+                {
+                    LogInfo($"Performing echoing.");
+                    DetermineLonelyDestFolders();
+                    ProgressManager_.NextReport();
+                    DeleteLonelyFoldersInDest();
+
+                    DetermineDiffDestFiles();
+                    ProgressManager_.NextReport();
+                    DeleteDiffDestFiles();
+
+                    DetermineLonelySourceFolders();
+                    ProgressManager_.NextReport();
+                    CopyFoldersToDest();
+
+                    DetermineDiffSourceFiles();
+                    ProgressManager_.NextReport();
+                    CopyFilesToDest();
+
+                    PerformPreviewComparison();
+                    LogInfo($"Finished performing echoing.");
+                }
+
+                ProgressManager_.Finish();
+            }
+            catch (Exception ex)
+            {
+                LogError($"Exception raised:{ex.Message}");
+                return false;
+            }
+            return true;
+        }
+
+        private void PerformPreviewComparison()
+        {
+            LogInfo($"Performing preview.");
+            DetermineLonelyDestFolders();
+            DetermineLonelySourceFolders();
+            DetermineDiffDestFiles();
+            DetermineDiffSourceFiles();
+            LogInfo($"Finished performing preview.");
         }
 
         private void DetermineDiffSourceFiles()
@@ -89,49 +136,6 @@ namespace Encore.Services
             }
         }
 
-        public void PerformPreviewComparison()
-        {
-            LogInfo($"Performing preview.");
-            DetermineLonelyDestFolders();
-            DetermineLonelySourceFolders();
-            DetermineDiffDestFiles();
-            DetermineDiffSourceFiles();
-            LogInfo($"Finished performing preview.");
-
-        }
-
-        public bool PerformEcho(bool preview)
-        {
-            LogInfo($"Performing echoing.");
-            if (preview)
-                PerformPreviewComparison();
-            else
-            {
-                LogInfo($"Performing echoing.");
-                DetermineLonelyDestFolders();
-                ProgressManager_.NextReport();
-                DeleteLonelyFoldersInDest();
-
-                DetermineDiffDestFiles();
-                ProgressManager_.NextReport();
-                DeleteDiffDestFiles();
-
-                DetermineLonelySourceFolders();
-                ProgressManager_.NextReport();
-                CopyFoldersToDest();
-
-                DetermineDiffSourceFiles();
-                ProgressManager_.NextReport();
-                CopyFilesToDest();
-
-                PerformPreviewComparison();
-                LogInfo($"Finished performing echoing.");
-            }
-
-            ProgressManager_.Finish();
-            return true;
-        }
-
         private void CopyFilesToDest()
         {
             foreach (var file_pair in DiffSourceFiles)
@@ -160,6 +164,8 @@ namespace Encore.Services
 
 
         private void LogInfo(string message) => Log_.LogInformation($"{Source} -> {Dest}: {message}");
+
+        private void LogError(string message) => Log_.LogError($"{Source} -> {Dest}: {message}");
 
     }
 }
