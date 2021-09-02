@@ -14,8 +14,8 @@ namespace Encore
             InitializeComponent();
             BackupService_ = backup_service;
             ProgressManager_ = progress_manager;
-            comboBoxDrive.DataSource = BackupService.Drives;
-            comboBoxBackup.DataSource = BackupService.Drives;
+            comboBoxDrive.DataSource =  BackupService.Drives.ToArray();
+            comboBoxBackup.DataSource = BackupService.Drives.ToArray();
         }
 
         private async void buttonFind_Click(object sender, EventArgs e)
