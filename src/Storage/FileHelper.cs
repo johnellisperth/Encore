@@ -1,5 +1,9 @@
 ﻿
 
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
 namespace Storage
 {
     public static class FileCompareHelper

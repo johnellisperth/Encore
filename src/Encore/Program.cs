@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Storage;
+using System;
 using System.Windows.Forms;
 
 namespace Encore

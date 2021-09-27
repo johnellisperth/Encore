@@ -1,4 +1,5 @@
 ﻿using Encore.Helpers;
+using Storage;
 using System.IO;
 
 namespace Encore.Models
@@ -18,10 +19,9 @@ namespace Encore.Models
             DestExists = File.Exists(End);
         }
 
-       // public void DeleteDestIfDiff() => FileSystemHelper.RemoveFile(End);
-
-       // public void CopySourceIfDiff() => File.Copy(Start, End, true);
-
-       
+        public bool IsSame()
+        {
+            return FileSystemHelper.DoFilesMatch(Start, End, true);
+        }
     }
 }

@@ -2,6 +2,8 @@
 using Encore.Models;
 using Microsoft.Extensions.Logging;
 using Storage;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Encore.Services
@@ -91,9 +93,9 @@ namespace Encore.Services
             DiffSourceFiles = new();
             foreach (var source_file in FileCompareHelper.GetAllFiles(Source))
             {
-                string possible_dest_file = FileCompareHelper.DiffDriveFilename(Dest, source_file);
-                if (!FileSystemHelper.DoFilesMatch(source_file, possible_dest_file, true))
-                    DiffSourceFiles.Add(new FilesPair(source_file, possible_dest_file));
+                FilesPair fp = new (source_file, FileCompareHelper.DiffDriveFilename(Dest, source_file));
+                if (!fp.IsSame())
+                    DiffSourceFiles.Add(fp);
             }
         }
 
@@ -104,9 +106,9 @@ namespace Encore.Services
             DiffDestFiles = new();
             foreach (var dest_file in FileCompareHelper.GetAllFiles(Dest))
             {
-                string possible_source_file = FileCompareHelper.DiffDriveFilename(Source, dest_file);
-                if (!FileSystemHelper.DoFilesMatch(possible_source_file, dest_file, true))
-                    DiffDestFiles.Add(new(possible_source_file, dest_file));
+                FilesPair fp = new (FileCompareHelper.DiffDriveFilename(Source, dest_file), dest_file);
+                if (!fp.IsSame())
+                    DiffDestFiles.Add(fp);
             }
         }
 
@@ -115,11 +117,13 @@ namespace Encore.Services
             LogInfo("Determine all dest folders that have no matching source folders.");
 
             LonelyDestFolders = new();
+           
             foreach (var dest_folder in FileCompareHelper.GetAllFolders(Dest))
             {
-                string possible_source_folder = FileCompareHelper.DiffDriveFilename(Source, dest_folder);
-                if (!Directory.Exists(possible_source_folder))
-                    LonelyDestFolders.Add(new(possible_source_folder, dest_folder));
+                FoldersPair fp = new (FileCompareHelper.DiffDriveFilename(Source, dest_folder), dest_folder);
+                
+                if (!fp.BothExist())
+                    LonelyDestFolders.Add(fp);
             }
         }
 
@@ -130,9 +134,9 @@ namespace Encore.Services
             LonelySourceFolders = new();
             foreach (var source_folder in FileCompareHelper.GetAllFolders(Source))
             {
-                string possible_dest_folder = FileCompareHelper.DiffDriveFilename(Dest, source_folder);
-                if (!Directory.Exists(possible_dest_folder))
-                    LonelySourceFolders.Add(new FoldersPair(source_folder, possible_dest_folder));
+                FoldersPair fp = new (source_folder, FileCompareHelper.DiffDriveFilename(Dest, source_folder));
+                if (!fp.BothExist())
+                    LonelySourceFolders.Add(fp);
             }
         }
 

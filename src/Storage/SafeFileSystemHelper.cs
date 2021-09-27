@@ -1,4 +1,7 @@
 ﻿
+using System;
+using System.IO;
+
 namespace Storage
 {
     public class SafeFileSystemHelper
