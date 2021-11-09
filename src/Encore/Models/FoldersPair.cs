@@ -1,14 +1,12 @@
 ﻿
-using System.IO;
-
 namespace Encore.Models
 {
     public class FoldersPair
     {
         public string Start { get; }
         public string End { get; }
-        public bool SourceExists { get; set; }
-        public bool DestExists { get; set; }
+        public bool SourceExists { get; }
+        public bool DestExists { get; }
 
         public FoldersPair(string start, string end)
         {
@@ -19,7 +17,5 @@ namespace Encore.Models
         }
 
         public bool BothExist() => SourceExists && DestExists;
-
-
     }
 }

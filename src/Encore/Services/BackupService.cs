@@ -3,9 +3,6 @@ using Encore.Helpers;
 using Encore.Models;
 using Storage;
 using Encore.Validation;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 
 namespace Encore.Services
 {
@@ -28,8 +25,8 @@ namespace Encore.Services
         public void GetResults(bool preview, out List<FilesPair> diff_files_found,out List<FoldersPair> diff_folders_found, out string message)
         {
             message = "";
-            diff_files_found = LastSourceDestComparison_?.DiffSourceFiles.Concat(LastSourceDestComparison_?.DiffDestFiles).ToList();
-            diff_folders_found = LastSourceDestComparison_?.LonelySourceFolders.Concat(LastSourceDestComparison_?.LonelyDestFolders).ToList();
+            diff_files_found = LastSourceDestComparison_.DiffSourceFiles.Concat(LastSourceDestComparison_.DiffDestFiles).ToList();
+            diff_folders_found = LastSourceDestComparison_.LonelySourceFolders.Concat(LastSourceDestComparison_.LonelyDestFolders).ToList();
             var diff_files_found_total = diff_files_found?.Count ?? 0;
             var diff_folders_found_total = diff_folders_found?.Count ?? 0;
             if (LastSourceDestComparison_ is null) return;

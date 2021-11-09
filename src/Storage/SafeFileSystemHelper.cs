@@ -1,13 +1,10 @@
 ﻿
-using System;
-using System.IO;
 
 namespace Storage
 {
     public class SafeFileSystemHelper
     {
-        public string EditableDrive { get; set; }
-
+        public string EditableDrive { get; set; } = string.Empty;
 
         public void DeleteFile(string filename) => SafeFileOperation(filename => FileSystemHelper.RemoveFile(filename), filename);
 
@@ -22,8 +19,8 @@ namespace Storage
         {
             try
             {
-                string root = Path.GetPathRoot(dest);
-                if (!root.Contains(EditableDrive))
+                string? root = Path.GetPathRoot(dest);
+                if (!string.IsNullOrEmpty(root) && !root.Contains(EditableDrive))
                     throw new InvalidOperationException("An attempt was made on changing the content of a drive that was not editable.");
 
                 action(dest);

@@ -2,8 +2,6 @@
 using Encore.Models;
 using Microsoft.Extensions.Logging;
 using Storage;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Encore.Services
