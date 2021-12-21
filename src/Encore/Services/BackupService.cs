@@ -10,8 +10,8 @@ public class BackupService
     private readonly SourceDestComparison LastSourceDestComparison_;
     private readonly SourceDestValidator Validator_;
     public static string[] Drives { get => UserFileSystem.PCDriveList; }
-    public string Source { get; set; }
-    public string Dest { get; set; }
+    public string Source { get; set; } = string.Empty;
+    public string Dest { get; set; } = string.Empty;
     private readonly ILogger Log_;
 
     public BackupService(ILogger<BackupService> logger, SourceDestComparison source_dest_comparison, SourceDestValidator validator)

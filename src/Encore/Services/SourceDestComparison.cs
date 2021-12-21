@@ -8,17 +8,19 @@ namespace Encore.Services;
 
 public class SourceDestComparison : INotifyPropertyChanged
 {
-    public string Source { get; private set; }
-    public string Dest { get; private set; }
-    public List<FoldersPair> LonelySourceFolders { get; private set; }
-    public List<FoldersPair> LonelyDestFolders { get; private set; }
-    public List<FilesPair> DiffSourceFiles { get; private set; }
-    public List<FilesPair> DiffDestFiles { get; private set; }
+    public string Source { get; private set; } = string.Empty;
+    public string Dest { get; private set; } = string.Empty;
+    public List<FoldersPair> LonelySourceFolders { get; private set; } = new ();
+    public List<FoldersPair> LonelyDestFolders { get; private set; } = new ();
+    public List<FilesPair> DiffSourceFiles { get; private set; } = new();
+    public List<FilesPair> DiffDestFiles { get; private set; } = new();
 
     private readonly SafeFileSystemHelper SafeFileHelper_ ;
     private readonly ILogger Log_;
     private ProgressManager ProgressManager_;
     private AppSettings AppSettings_;
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     public SourceDestComparison(ProgressManager progress_manager, ILogger<SourceDestComparison> logger,
         SafeFileSystemHelper safe_file_helper, AppSettings app_settings)
@@ -162,9 +164,6 @@ public class SourceDestComparison : INotifyPropertyChanged
         foreach (var file_pair in DiffDestFiles)
             SafeFileHelper_.DeleteFile(file_pair.End);
     }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
 
     private void LogInfo(string message) => Log_.LogInformation($"{Source} -> {Dest}: {message}");
 

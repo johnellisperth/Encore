@@ -55,7 +55,7 @@ static class Program
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error Occured");
+                Console.WriteLine($"Error Occured {ex.Message}");
             }
         }
     }
