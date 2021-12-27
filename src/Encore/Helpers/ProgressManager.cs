@@ -6,12 +6,17 @@ public class ProgressManager
 
     private int CurrentPos_;
 
-    private IProgress<int> Progress_;
+    public IProgress<int> Progress { get; set; }
 
-    public ProgressManager(IProgress<int> progress, int increment=1)
+    public ProgressManager(int increment=1)
     {
-        Progress_ = progress;
+        //Progress_ = progress;
         Increment = increment;
+    }
+
+    public void Setup(ProgressBar progressBar)
+    {
+      //  Progress_
     }
     public void Reset()
     {
@@ -20,14 +25,14 @@ public class ProgressManager
     }
     public void NextReport()
     {
-        Progress_.Report(CurrentPos_);
+        Progress.Report(CurrentPos_);
         CurrentPos_ += Increment;
         CurrentPos_ = Math.Min(100, CurrentPos_);
     }
     public void Finish()
     {
         CurrentPos_ = 100;
-        Progress_.Report(CurrentPos_);
+        Progress.Report(CurrentPos_);
     }
     public void AdjustIncrement(int number, int diviser) => Increment = Math.Max(number / diviser, 1);
 

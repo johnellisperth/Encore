@@ -82,9 +82,13 @@ public class SourceDestComparison : INotifyPropertyChanged
     {
         LogInfo($"Performing preview.");
         DetermineLonelyDestFolders();
+        ProgressManager_.NextReport();
         DetermineLonelySourceFolders();
+        ProgressManager_.NextReport();
         DetermineDiffDestFiles();
+        ProgressManager_.NextReport();
         DetermineDiffSourceFiles();
+        ProgressManager_.NextReport();
         LogInfo($"Finished performing preview.");
     }
 

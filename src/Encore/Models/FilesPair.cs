@@ -10,6 +10,7 @@ public class FilesPair
     public bool SourceExists { get; set; }
     public bool DestExists { get; set; }
 
+    
     public FilesPair(string start, string end)
     {
         Start = start;
