@@ -1,6 +1,28 @@
 ﻿namespace Storage;
 public static class FileSystemHelper
 {
+    public static long GetFileSize(string filename)
+    {
+        if (!File.Exists(filename))
+            return -1;
+        FileInfo fi1 = new FileInfo(filename);
+        return fi1.Length;
+    }
+
+    public static long GetFolderSize(string folder)
+    {
+        long folderSize = 0;
+        if (!Directory.Exists(folder))
+            return folderSize; 
+        DirectoryInfo di = new DirectoryInfo(folder);
+        FileInfo[] fi = di.GetFiles("*.*", SearchOption.AllDirectories);
+        for (int i = 0; i < fi.Count(); i++)
+        {
+            folderSize += fi[i].Length;
+        }
+        return folderSize;
+    }
+
     public static bool DoFilesMatch(string full_source_filename, string full_dest_filename, bool check_filesize_only = false, long perform_contents_equal_test_size_cutoff = long.MaxValue)
     {
         if (!File.Exists(full_source_filename) || !File.Exists(full_dest_filename))

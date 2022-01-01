@@ -12,8 +12,8 @@ public class BackupService
     public static string[] Drives { get => UserFileSystem.PCDriveList; }
     public string Source { get; set; } = string.Empty;
     public string Dest { get; set; } = string.Empty;
-    public List<FilesPair> DiffFilesFound { get; private set; }
-    public List<FoldersPair> DiffFoldersFound { get; private set; }
+  //  public List<FilesPair> DiffFilesFound { get; private set; } = new();
+   // public List<FoldersPair> DiffFoldersFound { get; private set; } = new();
     private readonly ILogger Log_;
 
     public  ProgressManager ProgressManager_;
@@ -40,8 +40,8 @@ public class BackupService
                 "No differences were found!" :
                 $"Found {diff_files_found_total} differences in files. Found { diff_folders_found_total} differences in folders.";
         Log_.LogInformation(message);
-        DiffFilesFound = diff_files_found;
-        DiffFoldersFound = diff_folders_found;
+        //DiffFilesFound = diff_files_found;
+       // DiffFoldersFound = diff_folders_found;
     }
 
     public ValidationResult PerformValidation()

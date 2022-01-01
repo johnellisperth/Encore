@@ -1,4 +1,6 @@
-﻿namespace Storage;
+﻿using System.Text.RegularExpressions;
+
+namespace Storage;
 public static class FileCompareHelper
 {
     public static IEnumerable<string> GetAllFolders(string folder) => Directory.EnumerateDirectories(folder, "*", new EnumerationOptions
@@ -12,6 +14,16 @@ public static class FileCompareHelper
         IgnoreInaccessible = true,
         RecurseSubdirectories = true
     });
+
+    public static IEnumerable<string> GetAllFiles(string folder, string[] toIgnore) => 
+        Directory.EnumerateFiles(folder, "*.*", new EnumerationOptions
+    {
+        IgnoreInaccessible = true,
+        RecurseSubdirectories = true
+    })
+        .Where(f => !toIgnore.Contains(Path.GetDirectoryName(f),StringComparer.InvariantCultureIgnoreCase));
+
+  
 
     public static string NoDriveFilename(string filename) => filename?.Length > 2 ? filename.Remove(0, 2) : string.Empty;
     public static string DiffDriveFilename(string drive, string filename) => drive + NoDriveFilename(filename);

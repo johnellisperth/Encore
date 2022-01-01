@@ -42,15 +42,11 @@ public partial class FormMain : Form
         if (!Validate()) return;
         try
         {
-            ProgressManager_.Increment = 25;
             //ProgressManager_ = new ProgressManager();
-            ProgressManager_.Progress = new Progress<int>(percent =>
-            {
-                progressBar1.Value = percent;
-            });
-
-            
-            //var progress = new Progress<int>(percent => progressBar1.Value = Math.Min(percent, 100));
+            ProgressManager_.Progress = new Progress<int>(percent => progressBar1.Value = Math.Min(percent, 100));
+            //{
+             //   progressBar1.Value = percent;
+            //});
 
             await BackupService_.PerformPreviewOrBackupAsync(preview);
         }

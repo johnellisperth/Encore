@@ -10,13 +10,19 @@ public class FilesPair
     public bool SourceExists { get; set; }
     public bool DestExists { get; set; }
 
-    
+    public long StartFileSize { get; set; }
+
+    public long EndFileSize { get; set; }
+    public bool IsSameSize { get; set; }
     public FilesPair(string start, string end)
     {
         Start = start;
         End = end;
         SourceExists = File.Exists(Start);
         DestExists = File.Exists(End);
+        StartFileSize = FileSystemHelper.GetFileSize(Start);
+        EndFileSize = FileSystemHelper.GetFileSize(End);
+        IsSameSize = StartFileSize == EndFileSize;
     }
 
     public bool IsSame(bool check_file_size_only, long perform_contents_equal_test_size_cutoff)
