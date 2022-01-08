@@ -7,41 +7,43 @@ using Encore.Validation;
 namespace Encore.Services;
 public class BackupService 
 {
-    private readonly SourceDestComparison LastSourceDestComparison_;
+    private readonly EncoreFileManager EncoreFileManager_;
     private readonly SourceDestValidator Validator_;
     public static string[] Drives { get => UserFileSystem.PCDriveList; }
+    public static Models.DriveInfo[] DrivesInfo
+    {
+        get => UserFileSystem.PCDetailedDriveList.Select(x =>
+            new Models.DriveInfo() { Drive = x.Item1, VolumeName = x.Item2 }).ToArray();
+    }
     public string Source { get; set; } = string.Empty;
     public string Dest { get; set; } = string.Empty;
-  //  public List<FilesPair> DiffFilesFound { get; private set; } = new();
-   // public List<FoldersPair> DiffFoldersFound { get; private set; } = new();
+    public  ProgressManager ProgressManager_;
+
     private readonly ILogger Log_;
 
-    public  ProgressManager ProgressManager_;
-    public BackupService(ILogger<BackupService> logger, SourceDestComparison source_dest_comparison, SourceDestValidator validator, ProgressManager progress_manager)
+    public BackupService(ILogger<BackupService> logger, EncoreFileManager encoreFileManager, SourceDestValidator validator, ProgressManager progressManager)
     {
         Log_ = logger;
-        LastSourceDestComparison_ = source_dest_comparison;
+        EncoreFileManager_ = encoreFileManager;
         Validator_ = validator;
-        ProgressManager_ = progress_manager;
+        ProgressManager_ = progressManager;
     }
 
-    public void GetResults(bool preview, out List<FilesPair> diff_files_found,out List<FoldersPair> diff_folders_found, out string message)
+    public void GetResults(bool preview, out List<FilesPair> diffFiles,out List<FoldersPair> diffFolders, out string message)
     {
         message = "";
-        diff_files_found = LastSourceDestComparison_.DiffSourceFiles.Concat(LastSourceDestComparison_.DiffDestFiles).ToList();
-        diff_folders_found = LastSourceDestComparison_.LonelySourceFolders.Concat(LastSourceDestComparison_.LonelyDestFolders).ToList();
-        var diff_files_found_total = diff_files_found?.Count ?? 0;
-        var diff_folders_found_total = diff_folders_found?.Count ?? 0;
-        if (LastSourceDestComparison_ is null) return;
+        diffFiles = EncoreFileManager_.DiffSourceFiles.Concat(EncoreFileManager_.DiffDestFiles).ToList();
+        diffFolders = EncoreFileManager_.LonelySourceFolders.Concat(EncoreFileManager_.LonelyDestFolders).ToList();
+        var diffFilesCount = diffFiles?.Count ?? 0;
+        var diffFoldersCount = diffFolders?.Count ?? 0;
+        if (EncoreFileManager_ is null) return;
         if (!preview)
-            message = $"Copied {diff_files_found_total} different files. Copied { diff_folders_found_total} different folders.";
+            message = $"Copied {diffFilesCount} different files. Copied {diffFoldersCount} different folders.";
         else
-            message = (diff_files_found_total == 0 && diff_folders_found_total == 0) ?
+            message = (diffFilesCount == 0 && diffFoldersCount == 0) ?
                 "No differences were found!" :
-                $"Found {diff_files_found_total} differences in files. Found { diff_folders_found_total} differences in folders.";
+                $"Found {diffFilesCount} differences in files. Found {diffFoldersCount} differences in folders.";
         Log_.LogInformation(message);
-        //DiffFilesFound = diff_files_found;
-       // DiffFoldersFound = diff_folders_found;
     }
 
     public ValidationResult PerformValidation()
@@ -54,11 +56,11 @@ public class BackupService
      
     public async Task PerformPreviewOrBackupAsync(bool preview)
     {
-        string preview_string = preview ? "preview " : "";
-        Log_.LogInformation($"Performing backup {preview_string}of {Source} onto {Dest}");
-        LastSourceDestComparison_.SetSourceDest(Source, Dest);
-        await Task.Run(() => LastSourceDestComparison_.PerformEcho(preview));
-        Log_.LogInformation($"Finsihed performing backup {preview_string}of {Source} onto {Dest}");
+        string previewString = preview ? "preview " : "";
+        Log_.LogInformation($"Performing backup {previewString}of {Source} onto {Dest}");
+        EncoreFileManager_.SetSourceDest(Source, Dest);
+        await Task.Run(() => EncoreFileManager_.PerformEcho(preview));
+        Log_.LogInformation($"Finsihed performing backup {previewString}of {Source} onto {Dest}");
     }
     /*
         foreach (var drive in UserFileSystem.PCDriveList)

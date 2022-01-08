@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace Storage;
+﻿namespace Storage;
 public static class FileCompareHelper
 {
     public static IEnumerable<string> GetAllFolders(string folder) => Directory.EnumerateDirectories(folder, "*", new EnumerationOptions

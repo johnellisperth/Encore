@@ -13,8 +13,8 @@ public partial class FormMain : Form
       
         BackupService_ = backup_service;
        
-        comboBoxDrive.DataSource =  BackupService.Drives.ToArray();
-        comboBoxBackup.DataSource = BackupService.Drives.ToArray();
+        comboBoxDrive.DataSource =  BackupService.DrivesInfo.ToArray();
+        comboBoxBackup.DataSource = BackupService.DrivesInfo.ToArray();
         ProgressManager_ = progress_manager;
     }
 
@@ -29,12 +29,14 @@ public partial class FormMain : Form
 
     private void comboBoxDrive_SelectedIndexChanged(object sender, EventArgs e)
     {
-        BackupService_.Source = comboBoxDrive.Text;
+        Models.DriveInfo sourceDrive = (Models.DriveInfo)comboBoxDrive.SelectedItem;
+        BackupService_.Source = sourceDrive.Drive;
     }
 
     private void comboBoxBackup_SelectedIndexChanged(object sender, EventArgs e)
     {
-        BackupService_.Dest = comboBoxBackup.Text;
+        Models.DriveInfo destDrive = (Models.DriveInfo)comboBoxBackup.SelectedItem;
+        BackupService_.Dest = destDrive.Drive;
     }
 
     private async Task PerformAction(bool preview)

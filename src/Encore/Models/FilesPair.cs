@@ -1,5 +1,4 @@
 ﻿
-
 using Storage;
 
 namespace Encore.Models;
@@ -9,11 +8,9 @@ public class FilesPair
     public string End { get; set; }
     public bool SourceExists { get; set; }
     public bool DestExists { get; set; }
-
     public long StartFileSize { get; set; }
-
     public long EndFileSize { get; set; }
-    public bool IsSameSize { get; set; }
+    public bool IsSameSize => StartFileSize == EndFileSize;
     public FilesPair(string start, string end)
     {
         Start = start;
@@ -22,7 +19,6 @@ public class FilesPair
         DestExists = File.Exists(End);
         StartFileSize = FileSystemHelper.GetFileSize(Start);
         EndFileSize = FileSystemHelper.GetFileSize(End);
-        IsSameSize = StartFileSize == EndFileSize;
     }
 
     public bool IsSame(bool check_file_size_only, long perform_contents_equal_test_size_cutoff)

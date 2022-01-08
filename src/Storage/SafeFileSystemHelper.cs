@@ -16,15 +16,10 @@ public class SafeFileSystemHelper
 
     private void SafeFileOperation(Action<string> action, string dest)
     {
-        try
-        {
-            string? root = Path.GetPathRoot(dest);
-            if (!string.IsNullOrEmpty(root) && !root.Contains(EditableDrive))
-                throw new InvalidOperationException("An attempt was made on changing the content of a drive that was not editable.");
-
-            action(dest);
-        }
-        catch { throw; }
+        string? root = Path.GetPathRoot(dest);
+        if (!string.IsNullOrEmpty(root) && !root.Contains(EditableDrive))
+            throw new InvalidOperationException("An attempt was made on changing the content of a drive that was not editable.");
+        action(dest);
     }
 
 }

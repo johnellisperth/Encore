@@ -2,11 +2,10 @@
 using Encore.Models;
 using Microsoft.Extensions.Logging;
 using Storage;
-using System.ComponentModel;
 
 namespace Encore.Services;
 
-public class SourceDestComparison// : INotifyPropertyChanged
+public class EncoreFileManager
 {
     public string Source { get; private set; } = string.Empty;
     public string Dest { get; private set; } = string.Empty;
@@ -21,16 +20,14 @@ public class SourceDestComparison// : INotifyPropertyChanged
     private ProgressManager ProgressManager_;
     private AppSettings AppSettings_;
 
-   // public event PropertyChangedEventHandler? PropertyChanged;
-
-    public SourceDestComparison(ProgressManager progress_manager, ILogger<SourceDestComparison> logger,
-        SafeFileSystemHelper safe_file_helper, AppSettings app_settings)
+    public EncoreFileManager(ProgressManager progressManager, ILogger<EncoreFileManager> logger,
+        SafeFileSystemHelper safeFileHelper, AppSettings appSettings)
     {
         Log_ = logger;
-        ProgressManager_ = progress_manager;
-        ProgressManager_ = progress_manager;
-        SafeFileHelper_ = safe_file_helper;
-        AppSettings_ = app_settings;
+        ProgressManager_ = progressManager;
+        ProgressManager_ = progressManager;
+        SafeFileHelper_ = safeFileHelper;
+        AppSettings_ = appSettings;
     }
 
     public void SetSourceDest(string source_folder, string dest_folder)
@@ -100,16 +97,14 @@ public class SourceDestComparison// : INotifyPropertyChanged
     {
         LogInfo($"Determine all source files that are different from matching dest files");
         DiffSourceFiles = new();
-        foreach (var source_file in FileCompareHelper.GetAllFiles(Source))
+        foreach (var sourceFile in FileCompareHelper.GetAllFiles(Source))
         {
           
-            FilesPair fp = new (source_file, FileCompareHelper.DiffDriveFilename(Dest, source_file));
+            FilesPair fp = new (sourceFile, FileCompareHelper.DiffDriveFilename(Dest, sourceFile));
             if (!fp.IsSameSize)///IsSame(true, 2000000000))
                 DiffSourceFiles.Add(fp);
         }
     }
-
-
 
     private void DetermineDiffDestFiles()
     {
@@ -117,37 +112,37 @@ public class SourceDestComparison// : INotifyPropertyChanged
 
         DiffDestFiles = new();
         var lonelyDestFolders = LonelyDestFolders.Select(fp => fp.End).ToArray();
-        foreach (var dest_file in FileCompareHelper.GetAllFiles(Dest))
+        foreach (var destFile in FileCompareHelper.GetAllFiles(Dest))
         {
-            FilesPair fp = new (FileCompareHelper.DiffDriveFilename(Source, dest_file), dest_file);
+            FilesPair fp = new (FileCompareHelper.DiffDriveFilename(Source, destFile), destFile);
             if (!fp.IsSameSize)//IsSame(true, 2000000000))
                 DiffDestFiles.Add(fp);
         }
     }
 
-    private void DetermineLonelyDestFolders(bool determine_folder_size)
+    private void DetermineLonelyDestFolders(bool determineFolderSize)
     {
         LogInfo("Determine all dest folders that have no matching source folders.");
 
         LonelyDestFolders = new();
            
-        foreach (var dest_folder in FileCompareHelper.GetAllFolders(Dest))
+        foreach (var destFolder in FileCompareHelper.GetAllFolders(Dest))
         {
-            FoldersPair fp = new (FileCompareHelper.DiffDriveFilename(Source, dest_folder), dest_folder,determine_folder_size);
+            FoldersPair fp = new (FileCompareHelper.DiffDriveFilename(Source, destFolder), destFolder,determineFolderSize);
                 
             if (!fp.BothExist())///same as saying if the Source doesnt Exists
                 LonelyDestFolders.Add(fp);
         }
     }
 
-    private void DetermineLonelySourceFolders(bool determine_folder_size)
+    private void DetermineLonelySourceFolders(bool determineFolderSize)
     {
         LogInfo("Determine all source folders that have no matching dest folders.");
 
         LonelySourceFolders = new();
-        foreach (var source_folder in FileCompareHelper.GetAllFolders(Source))
+        foreach (var sourceFolder in FileCompareHelper.GetAllFolders(Source))
         {
-            FoldersPair fp = new (source_folder, FileCompareHelper.DiffDriveFilename(Dest, source_folder), determine_folder_size);
+            FoldersPair fp = new (sourceFolder, FileCompareHelper.DiffDriveFilename(Dest, sourceFolder), determineFolderSize);
             if (!fp.BothExist())
                 LonelySourceFolders.Add(fp);
         }
@@ -155,37 +150,37 @@ public class SourceDestComparison// : INotifyPropertyChanged
 
     private void CopyFilesToDest()
     {
-        foreach (var file_pair in DiffSourceFiles)
+        foreach (var filePair in DiffSourceFiles)
         {
-            SafeFileHelper_.CopyFile(file_pair.Start, file_pair.End, true);
-            ProgressManager_.Update(file_pair.StartFileSize);
+            SafeFileHelper_.CopyFile(filePair.Start, filePair.End, true);
+            ProgressManager_.Update(filePair.StartFileSize);
         }
     }
 
     private void CopyFoldersToDest()
     {
-        foreach (var folder_pair in LonelySourceFolders)
+        foreach (var folderPair in LonelySourceFolders)
         {
-            SafeFileHelper_.CopyFolder(folder_pair.Start, folder_pair.End);
-            ProgressManager_.Update(folder_pair.StartFolderSize);
+            SafeFileHelper_.CopyFolder(folderPair.Start, folderPair.End);
+            ProgressManager_.Update(folderPair.StartFolderSize);
         }
     }
 
     private void DeleteLonelyFoldersInDest()
     {
-        foreach (var folder_pair in LonelyDestFolders)
+        foreach (var folderPair in LonelyDestFolders)
         {
-            SafeFileHelper_.DeleteFolder(folder_pair.End);
-            ProgressManager_.Update(folder_pair.EndFolderSize);
+            SafeFileHelper_.DeleteFolder(folderPair.End);
+            ProgressManager_.Update(folderPair.EndFolderSize);
         }
     }
 
     private void DeleteDiffDestFiles()
     {
-        foreach (var file_pair in DiffDestFiles)
+        foreach (var filePair in DiffDestFiles)
         {
-            SafeFileHelper_.DeleteFile(file_pair.End);
-            ProgressManager_.Update(file_pair.EndFileSize);
+            SafeFileHelper_.DeleteFile(filePair.End);
+            ProgressManager_.Update(filePair.EndFileSize);
         }
     }
 
@@ -194,4 +189,7 @@ public class SourceDestComparison// : INotifyPropertyChanged
     private void LogError(string message) => Log_.LogError($"{Source} -> {Dest}: {message}");
 
 }
+
+
+
 

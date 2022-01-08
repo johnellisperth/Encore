@@ -23,13 +23,13 @@ public static class FileSystemHelper
         return folderSize;
     }
 
-    public static bool DoFilesMatch(string full_source_filename, string full_dest_filename, bool check_filesize_only = false, long perform_contents_equal_test_size_cutoff = long.MaxValue)
+    public static bool DoFilesMatch(string fullSourceFilename, string fullDestFilename, bool checkFilesizeOnly = false, long performContentsEqualTestSizeCutoff = long.MaxValue)
     {
-        if (!File.Exists(full_source_filename) || !File.Exists(full_dest_filename))
+        if (!File.Exists(fullSourceFilename) || !File.Exists(fullDestFilename))
             return false;
-        FileInfo fi1 = new FileInfo(full_source_filename);
-        FileInfo fi2 = new FileInfo(full_dest_filename);
-        return FileCompareHelper.AreFilesEqual(fi1, fi2, check_filesize_only, perform_contents_equal_test_size_cutoff);
+        FileInfo fi1 = new FileInfo(fullSourceFilename);
+        FileInfo fi2 = new FileInfo(fullDestFilename);
+        return FileCompareHelper.AreFilesEqual(fi1, fi2, checkFilesizeOnly, performContentsEqualTestSizeCutoff);
     }
 
     public static void RemoveFile(string filename)///, bool use_recycle_bin = false)
@@ -40,15 +40,15 @@ public static class FileSystemHelper
         File.Delete(filename);
     }
 
-    public static void CopyFile(string source_file, string dest_file, bool overwrite = true)
+    public static void CopyFile(string sourceFile, string destFile, bool overwrite = true)
     {
         //do we need dest to readwrite in case its readonly?
-        File.Copy(source_file, dest_file, overwrite);
+        File.Copy(sourceFile, destFile, overwrite);
     }
 
     public static void DeleteFolder(string folder)//, bool use_recycle_bin = false)
     {
-        var root = Path.GetPathRoot(folder);
+        //var root = Path.GetPathRoot(folder);
         if (!Directory.Exists(folder))
             return;
         var di = new DirectoryInfo(folder);
@@ -58,10 +58,9 @@ public static class FileSystemHelper
         Directory.Delete(folder, true);
     }
 
-    public static bool CopyFolder(string source, string dest, bool fail_on_dest_existing = true)
+    public static bool CopyFolder(string source, string dest, bool failOnDestExisting = true)
     {
-        if (fail_on_dest_existing && Directory.Exists(dest)) return false;
-        //if (check_source_is_source)
+        if (failOnDestExisting && Directory.Exists(dest)) return false;
         Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(source, dest);
         return true;
     }

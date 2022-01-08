@@ -10,13 +10,13 @@ public class FoldersPair
     public bool DestExists { get; }
     public long StartFolderSize { get; set; }
     public long EndFolderSize { get; set; }
-    public FoldersPair(string start, string end, bool determine_sizes = false)
+    public FoldersPair(string start, string end, bool determineSize = false)
     {
         Start = start; 
         End = end;
         SourceExists = Directory.Exists(Start);
         DestExists = Directory.Exists(End);
-        if (determine_sizes)
+        if (determineSize)
         {
             StartFolderSize = FileSystemHelper.GetFolderSize(Start);
             EndFolderSize = FileSystemHelper.GetFolderSize(End);

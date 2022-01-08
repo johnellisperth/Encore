@@ -37,7 +37,7 @@ static class Program
                 services.AddScoped<SourceDestValidator>();
                 services.AddScoped<SafeFileSystemHelper>();
                 services.AddScoped<AppSettings>();
-                services.AddScoped<SourceDestComparison>();
+                services.AddScoped<EncoreFileManager>();
                 services.AddScoped<BackupService>();
                 services.AddScoped<FormMain>();
 
