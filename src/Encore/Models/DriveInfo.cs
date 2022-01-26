@@ -8,7 +8,7 @@ public class DriveInfo
 
     public override string ToString()
     {
-        return $"{VolumeName} ({Drive})";
+        return !String.IsNullOrEmpty(Drive) ? $"{VolumeName} ({Drive})" : "Select a drive...";
     }
 }
 

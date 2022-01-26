@@ -30,11 +30,11 @@ public class EncoreFileManager
         AppSettings_ = appSettings;
     }
 
-    public void SetSourceDest(string source_folder, string dest_folder)
+    public void SetSourceDest(string source, string dest)
     {
-        Source = source_folder;
-        Dest = dest_folder;
-        SafeFileHelper_.EditableDrive = dest_folder;
+        Source = source;
+        Dest = dest;
+        SafeFileHelper_.EditableDrive = dest;
     }
 
     public bool PerformEcho(bool preview)
@@ -47,27 +47,27 @@ public class EncoreFileManager
             {
                 LogInfo($"Performing echoing.");
                 DetermineLonelyDestFolders(true);
-                long bytes_to_change = LonelyDestFolders.Sum(f => f.EndFolderSize);
-                ProgressManager_.NextSubStep(bytes_to_change);
+                long bytesToChange = LonelyDestFolders.Sum(f => f.EndFolderSize);
+                ProgressManager_.NextSubStep(bytesToChange);
                 DeleteLonelyFoldersInDest();
 
                 DetermineDiffDestFiles();
-                bytes_to_change = DiffDestFiles.Sum(f => f.EndFileSize);
-                ProgressManager_.NextSubStep(bytes_to_change);
+                bytesToChange = DiffDestFiles.Sum(f => f.EndFileSize);
+                ProgressManager_.NextSubStep(bytesToChange);
                 DeleteDiffDestFiles();
 
                 DetermineLonelySourceFolders(true);
-                bytes_to_change = LonelySourceFolders.Sum(f => f.StartFolderSize);
-                ProgressManager_.NextSubStep(bytes_to_change);
-                CopyFoldersToDest();
+                bytesToChange = LonelySourceFolders.Sum(f => f.StartFolderSize);
+                ProgressManager_.NextSubStep(bytesToChange);
+                CopySourceFoldersToDest();
 
                 DetermineDiffSourceFiles();
-                bytes_to_change = DiffSourceFiles.Sum(f => f.StartFileSize);
-                ProgressManager_.NextSubStep(bytes_to_change);
-                CopyFilesToDest();
+                bytesToChange = DiffSourceFiles.Sum(f => f.StartFileSize);
+                ProgressManager_.NextSubStep(bytesToChange);
+                CopySourceFilesToDest();
 
                 PerformPreviewComparison();
-                LogInfo($"Finished performing echoing.");
+                LogInfo($"Finished performing echo.");
             }
 
             ProgressManager_.Finish();
@@ -111,12 +111,12 @@ public class EncoreFileManager
         LogInfo("Determine all dest files that are different from matching source files");
 
         DiffDestFiles = new();
-        var lonelyDestFolders = LonelyDestFolders.Select(fp => fp.End).ToArray();
+        var lonelyDestFolders = LonelyDestFolders.Select(fp => fp.Dest).ToArray();
         foreach (var destFile in FileCompareHelper.GetAllFiles(Dest))
         {
-            FilesPair fp = new (FileCompareHelper.DiffDriveFilename(Source, destFile), destFile);
-            if (!fp.IsSameSize)//IsSame(true, 2000000000))
-                DiffDestFiles.Add(fp);
+            FilesPair filePair = new (FileCompareHelper.DiffDriveFilename(Source, destFile), destFile);
+            if (!filePair.IsSameSize)//IsSame(true, 2000000000))
+                DiffDestFiles.Add(filePair);
         }
     }
 
@@ -128,10 +128,10 @@ public class EncoreFileManager
            
         foreach (var destFolder in FileCompareHelper.GetAllFolders(Dest))
         {
-            FoldersPair fp = new (FileCompareHelper.DiffDriveFilename(Source, destFolder), destFolder,determineFolderSize);
+            FoldersPair folderPair = new (FileCompareHelper.DiffDriveFilename(Source, destFolder), destFolder,determineFolderSize);
                 
-            if (!fp.BothExist())///same as saying if the Source doesnt Exists
-                LonelyDestFolders.Add(fp);
+            if (!folderPair.BothExist())///same as saying if the Source doesnt Exists
+                LonelyDestFolders.Add(folderPair);
         }
     }
 
@@ -142,26 +142,26 @@ public class EncoreFileManager
         LonelySourceFolders = new();
         foreach (var sourceFolder in FileCompareHelper.GetAllFolders(Source))
         {
-            FoldersPair fp = new (sourceFolder, FileCompareHelper.DiffDriveFilename(Dest, sourceFolder), determineFolderSize);
-            if (!fp.BothExist())
-                LonelySourceFolders.Add(fp);
+            FoldersPair folderPair = new (sourceFolder, FileCompareHelper.DiffDriveFilename(Dest, sourceFolder), determineFolderSize);
+            if (!folderPair.BothExist())
+                LonelySourceFolders.Add(folderPair);
         }
     }
 
-    private void CopyFilesToDest()
+    private void CopySourceFilesToDest()
     {
         foreach (var filePair in DiffSourceFiles)
         {
-            SafeFileHelper_.CopyFile(filePair.Start, filePair.End, true);
+            SafeFileHelper_.CopyFile(filePair.Source, filePair.Dest, true);
             ProgressManager_.Update(filePair.StartFileSize);
         }
     }
 
-    private void CopyFoldersToDest()
+    private void CopySourceFoldersToDest()
     {
         foreach (var folderPair in LonelySourceFolders)
         {
-            SafeFileHelper_.CopyFolder(folderPair.Start, folderPair.End);
+            SafeFileHelper_.CopyFolder(folderPair.Source, folderPair.Dest);
             ProgressManager_.Update(folderPair.StartFolderSize);
         }
     }
@@ -170,7 +170,7 @@ public class EncoreFileManager
     {
         foreach (var folderPair in LonelyDestFolders)
         {
-            SafeFileHelper_.DeleteFolder(folderPair.End);
+            SafeFileHelper_.DeleteFolder(folderPair.Dest);
             ProgressManager_.Update(folderPair.EndFolderSize);
         }
     }
@@ -179,7 +179,7 @@ public class EncoreFileManager
     {
         foreach (var filePair in DiffDestFiles)
         {
-            SafeFileHelper_.DeleteFile(filePair.End);
+            SafeFileHelper_.DeleteFile(filePair.Dest);
             ProgressManager_.Update(filePair.EndFileSize);
         }
     }

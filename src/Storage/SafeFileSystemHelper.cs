@@ -17,7 +17,7 @@ public class SafeFileSystemHelper
     private void SafeFileOperation(Action<string> action, string dest)
     {
         string? root = Path.GetPathRoot(dest);
-        if (!string.IsNullOrEmpty(root) && !root.Contains(EditableDrive))
+        if (!string.IsNullOrEmpty(root) && !root.Contains(EditableDrive, StringComparison.CurrentCultureIgnoreCase))
             throw new InvalidOperationException("An attempt was made on changing the content of a drive that was not editable.");
         action(dest);
     }

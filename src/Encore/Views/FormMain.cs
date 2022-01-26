@@ -7,59 +7,87 @@ public partial class FormMain : Form
 {
     BackupService BackupService_;
     ProgressManager ProgressManager_;
-    public FormMain(BackupService backup_service,  ProgressManager progress_manager)
+    public FormMain(BackupService backup_service, ProgressManager progress_manager)
     {
         InitializeComponent();
-      
         BackupService_ = backup_service;
-       
-        comboBoxDrive.DataSource =  BackupService.DrivesInfo.ToArray();
-        comboBoxBackup.DataSource = BackupService.DrivesInfo.ToArray();
+        comboBoxDrive.DataSource = BackupService_.AvailableSourceDriveList;
+        comboBoxBackup.DataSource = BackupService_.AvailableDestDriveList;
         ProgressManager_ = progress_manager;
+        UpdateButtonStates();
     }
 
-    private async void buttonFind_Click(object sender, EventArgs e)
+    private async void buttonCompare_Click(object sender, EventArgs e)
     {
-        await PerformAction(true);
+        await Compare();
     }
-    private async void buttonEcho_Click(object sender, EventArgs e)
+
+    private async void buttonBackup_Click(object sender, EventArgs e)
     {
-        await PerformAction(false);
+        await Backup();
     }
 
     private void comboBoxDrive_SelectedIndexChanged(object sender, EventArgs e)
     {
         Models.DriveInfo sourceDrive = (Models.DriveInfo)comboBoxDrive.SelectedItem;
         BackupService_.Source = sourceDrive.Drive;
+        UpdateButtonStates();
     }
 
     private void comboBoxBackup_SelectedIndexChanged(object sender, EventArgs e)
     {
         Models.DriveInfo destDrive = (Models.DriveInfo)comboBoxBackup.SelectedItem;
         BackupService_.Dest = destDrive.Drive;
+        UpdateButtonStates();
     }
 
-    private async Task PerformAction(bool preview)
+    private void UpdateButtonStates()
     {
-        if (!Validate()) return;
+        bool sourceDestNotEqual = SourceDestNotEqual();
+        buttonCompare.Enabled = sourceDestNotEqual;
+        buttonBackup.Enabled = sourceDestNotEqual;
+    }
+
+    private bool SourceDestNotEqual()
+    { 
+        Models.DriveInfo sourceDrive = (Models.DriveInfo) comboBoxDrive.SelectedItem;
+        Models.DriveInfo destDrive = (Models.DriveInfo)comboBoxBackup.SelectedItem;
+        return !string.IsNullOrEmpty(sourceDrive.Drive) && !string.IsNullOrEmpty(destDrive.Drive)  && 
+        !string.Equals(sourceDrive.Drive, destDrive.Drive, StringComparison.CurrentCultureIgnoreCase);
+    }
+
+    private async Task Compare()
+    {
+        if (!PerformValidate()) return;
         try
         {
-            //ProgressManager_ = new ProgressManager();
             ProgressManager_.Progress = new Progress<int>(percent => progressBar1.Value = Math.Min(percent, 100));
-            //{
-             //   progressBar1.Value = percent;
-            //});
-
-            await BackupService_.PerformPreviewOrBackupAsync(preview);
+            await BackupService_.Compare();
         }
         catch (Exception ex)
         {
             NotCompleted(ex.Message);
             return;
         }
-        Completed(preview);
+        Completed(true);
     }
 
+
+    private async Task Backup()
+    {
+        if (!PerformValidate()) return;
+        try
+        {
+            ProgressManager_.Progress = new Progress<int>(percent => progressBar1.Value = Math.Min(percent, 100));
+            await BackupService_.Backup();
+        }
+        catch (Exception ex)
+        {
+            NotCompleted(ex.Message);
+            return;
+        }
+        Completed(false);
+    }
     /*void callback( long totalFileSize, long totalBytesTransferred, IProgress<int> progress)
     {
         fileProgress = totalBytesTransferred;
@@ -88,7 +116,7 @@ public partial class FormMain : Form
         ProgressManager_.Reset();
     }
 
-    private bool Validate()
+    private bool PerformValidate()
     {
         var result = BackupService_.PerformValidation();
         if (!result.IsValid)

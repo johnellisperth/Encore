@@ -29,35 +29,32 @@ namespace Encore
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonFind = new System.Windows.Forms.Button();
+            this.buttonCompare = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.buttonEcho = new System.Windows.Forms.Button();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonBackup = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.comboBoxDrive = new System.Windows.Forms.ComboBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.comboBoxBackup = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
-            // buttonFind
+            // buttonCompare
             // 
-            this.buttonFind.Location = new System.Drawing.Point(782, 33);
-            this.buttonFind.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
-            this.buttonFind.Name = "buttonFind";
-            this.buttonFind.Size = new System.Drawing.Size(401, 85);
-            this.buttonFind.TabIndex = 0;
-            this.buttonFind.Text = "Find...";
-            this.buttonFind.UseVisualStyleBackColor = true;
-            this.buttonFind.Click += new System.EventHandler(this.buttonFind_Click);
+            this.buttonCompare.Location = new System.Drawing.Point(81, 253);
+            this.buttonCompare.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
+            this.buttonCompare.Name = "buttonCompare";
+            this.buttonCompare.Size = new System.Drawing.Size(401, 85);
+            this.buttonCompare.TabIndex = 0;
+            this.buttonCompare.Text = "Compare";
+            this.buttonCompare.UseVisualStyleBackColor = true;
+            this.buttonCompare.Click += new System.EventHandler(this.buttonCompare_Click);
             // 
             // dataGridView1
             // 
@@ -67,60 +64,24 @@ namespace Encore
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(7, 8);
+            this.dataGridView1.Location = new System.Drawing.Point(867, 112);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 102;
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(1510, 699);
+            this.dataGridView1.Size = new System.Drawing.Size(1471, 490);
             this.dataGridView1.TabIndex = 3;
             // 
-            // buttonEcho
+            // buttonBackup
             // 
-            this.buttonEcho.Location = new System.Drawing.Point(1197, 33);
-            this.buttonEcho.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
-            this.buttonEcho.Name = "buttonEcho";
-            this.buttonEcho.Size = new System.Drawing.Size(401, 85);
-            this.buttonEcho.TabIndex = 4;
-            this.buttonEcho.Text = "Echo...";
-            this.buttonEcho.UseVisualStyleBackColor = true;
-            this.buttonEcho.Click += new System.EventHandler(this.buttonEcho_Click);
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(29, 148);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel1);
-            this.splitContainer1.Size = new System.Drawing.Size(2346, 1471);
-            this.splitContainer1.SplitterDistance = 779;
-            this.splitContainer1.SplitterWidth = 10;
-            this.splitContainer1.TabIndex = 5;
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tableLayoutPanel1.Controls.Add(this.dataGridView1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.dataGridView2, 0, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(7, 8);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1524, 1430);
-            this.tableLayoutPanel1.TabIndex = 4;
+            this.buttonBackup.Location = new System.Drawing.Point(81, 382);
+            this.buttonBackup.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
+            this.buttonBackup.Name = "buttonBackup";
+            this.buttonBackup.Size = new System.Drawing.Size(401, 85);
+            this.buttonBackup.TabIndex = 4;
+            this.buttonBackup.Text = "Backup";
+            this.buttonBackup.UseVisualStyleBackColor = true;
+            this.buttonBackup.Click += new System.EventHandler(this.buttonBackup_Click);
             // 
             // dataGridView2
             // 
@@ -130,27 +91,27 @@ namespace Encore
             this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView2.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(7, 723);
+            this.dataGridView2.Location = new System.Drawing.Point(867, 728);
             this.dataGridView2.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.RowHeadersWidth = 102;
             this.dataGridView2.RowTemplate.Height = 25;
-            this.dataGridView2.Size = new System.Drawing.Size(1510, 699);
+            this.dataGridView2.Size = new System.Drawing.Size(1471, 491);
             this.dataGridView2.TabIndex = 4;
             // 
             // comboBoxDrive
             // 
             this.comboBoxDrive.FormattingEnabled = true;
-            this.comboBoxDrive.Location = new System.Drawing.Point(97, 44);
+            this.comboBoxDrive.Location = new System.Drawing.Point(238, 52);
             this.comboBoxDrive.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
             this.comboBoxDrive.Name = "comboBoxDrive";
-            this.comboBoxDrive.Size = new System.Drawing.Size(288, 49);
+            this.comboBoxDrive.Size = new System.Drawing.Size(339, 49);
             this.comboBoxDrive.TabIndex = 6;
             this.comboBoxDrive.SelectedIndexChanged += new System.EventHandler(this.comboBoxDrive_SelectedIndexChanged);
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(1613, 46);
+            this.progressBar1.Location = new System.Drawing.Point(31, 591);
             this.progressBar1.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(748, 63);
@@ -159,10 +120,10 @@ namespace Encore
             // comboBoxBackup
             // 
             this.comboBoxBackup.FormattingEnabled = true;
-            this.comboBoxBackup.Location = new System.Drawing.Point(474, 44);
+            this.comboBoxBackup.Location = new System.Drawing.Point(238, 150);
             this.comboBoxBackup.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
             this.comboBoxBackup.Name = "comboBoxBackup";
-            this.comboBoxBackup.Size = new System.Drawing.Size(288, 49);
+            this.comboBoxBackup.Size = new System.Drawing.Size(339, 49);
             this.comboBoxBackup.TabIndex = 8;
             this.comboBoxBackup.SelectedIndexChanged += new System.EventHandler(this.comboBoxBackup_SelectedIndexChanged);
             // 
@@ -172,42 +133,72 @@ namespace Encore
             this.label1.Location = new System.Drawing.Point(5, 52);
             this.label1.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 41);
+            this.label1.Size = new System.Drawing.Size(116, 41);
             this.label1.TabIndex = 9;
-            this.label1.Text = "Start:";
+            this.label1.Text = "Source:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(401, 52);
+            this.label2.Location = new System.Drawing.Point(16, 150);
             this.label2.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(75, 41);
+            this.label2.Size = new System.Drawing.Size(176, 41);
             this.label2.TabIndex = 10;
-            this.label2.Text = "End:";
+            this.label2.Text = "Destination:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(867, 52);
+            this.label3.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(306, 41);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "All Folder Differences:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(867, 656);
+            this.label4.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(267, 41);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "All File Differences:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(31, 530);
+            this.label5.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(140, 41);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Progress:";
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(17F, 41F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2404, 1651);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.dataGridView2);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBoxBackup);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.comboBoxDrive);
-            this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.buttonEcho);
-            this.Controls.Add(this.buttonFind);
+            this.Controls.Add(this.buttonBackup);
+            this.Controls.Add(this.buttonCompare);
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
             this.Name = "FormMain";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -216,17 +207,18 @@ namespace Encore
 
         #endregion
 
-        private System.Windows.Forms.Button buttonFind;
+        private System.Windows.Forms.Button buttonCompare;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Button buttonEcho;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Button buttonBackup;
         private System.Windows.Forms.ComboBox comboBoxDrive;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.ComboBox comboBoxBackup;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private Label label3;
+        private Label label4;
+        private Label label5;
     }
 }
 

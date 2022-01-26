@@ -23,13 +23,13 @@ public static class FileSystemHelper
         return folderSize;
     }
 
-    public static bool DoFilesMatch(string fullSourceFilename, string fullDestFilename, bool checkFilesizeOnly = false, long performContentsEqualTestSizeCutoff = long.MaxValue)
+    public static bool DoFilesMatch(string fullSourceFilename, string fullDestFilename, bool compareOnlyFileSize = false, long performContentsEqualTestSizeCutoff = long.MaxValue)
     {
         if (!File.Exists(fullSourceFilename) || !File.Exists(fullDestFilename))
             return false;
         FileInfo fi1 = new FileInfo(fullSourceFilename);
         FileInfo fi2 = new FileInfo(fullDestFilename);
-        return FileCompareHelper.AreFilesEqual(fi1, fi2, checkFilesizeOnly, performContentsEqualTestSizeCutoff);
+        return FileCompareHelper.AreFilesEqual(fi1, fi2, compareOnlyFileSize, performContentsEqualTestSizeCutoff);
     }
 
     public static void RemoveFile(string filename)///, bool use_recycle_bin = false)
