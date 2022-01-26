@@ -10,6 +10,7 @@ public partial class FormMain : Form
     public FormMain(BackupService backup_service, ProgressManager progress_manager)
     {
         InitializeComponent();
+        Text = "Encore";
         BackupService_ = backup_service;
         comboBoxDrive.DataSource = BackupService_.AvailableSourceDriveList;
         comboBoxBackup.DataSource = BackupService_.AvailableDestDriveList;
