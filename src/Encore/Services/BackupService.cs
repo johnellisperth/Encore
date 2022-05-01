@@ -88,37 +88,5 @@ public class BackupService
         await Task.Run(() => EncoreFileManager_.PerformEcho(preview));
         Log_.LogInformation($"Finsihed performing backup {previewString}of {Source} onto {Dest}");
     }
-    /*
-        foreach (var drive in UserFileSystem.PCDriveList)
-            DriveList.Add(new DriveSettings()
-            {
-                DriveLetter = $"{drive}",//$"{drive.Key}:\\",
-                IsBitlockable = false,//drive.Value,
-                Password = "NA"//drive.Value ? "": "NA",
-            });
-        */
-
-    /*  public DriveSettings GetDriveSettings(string drive) =>  DriveList.FirstOrDefault(d => 
-        string.Equals(drive, d.DriveLetter) && 
-        !string.IsNullOrEmpty(d.BackupDrive) && 
-        !string.Equals(d.DriveLetter, d.BackupDrive));//backup drive must be different and set
-    */
-
-
-    /*public void UpdateSourceList()
-    {
-        AvailableSourceDriveList = new() { new Models.DriveInfo() };
-        AvailableSourceDriveList.AddRange(DrivesInfo);
-        if (!string.IsNullOrEmpty(Dest))
-            AvailableSourceDriveList.RemoveAll(dd=>dd.Drive ==  Dest);
-    }
-
-    public void UpdateDestList()
-    {
-        AvailableDestDriveList = new() { new Models.DriveInfo() };
-        AvailableDestDriveList.AddRange(DrivesInfo);
-        if (!string.IsNullOrEmpty(Source))
-            AvailableDestDriveList.RemoveAll(dd => dd.Drive == Source);
-    }*/
 }
 
