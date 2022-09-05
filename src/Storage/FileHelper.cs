@@ -43,10 +43,8 @@ public static class FileCompareHelper
 
 
     /// https://social.msdn.microsoft.com/Forums/vstudio/en-US/54eb346f-f979-49fb-aa2d-44dddad066bd/how-to-read-file-in-chunks-with-for-loop?forum=netfxbcl
-
     public static IEnumerable<byte[]> ReadChunks(string path)
     {
-
         // FileStream FS = new FileStream(path, FileMode.Open, FileAccess.Read);
         using (var FS = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
