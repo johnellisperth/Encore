@@ -55,6 +55,7 @@ static class Program
             }
             catch (Exception ex)
             {
+                //check that you have bitlock unlocked all drives!
                 Console.WriteLine($"Error Occured {ex.Message}");
             }
         }
