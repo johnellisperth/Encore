@@ -97,7 +97,7 @@ public class EncoreFileManager
     {
         LogInfo($"Determine all source files that are different from matching dest files");
         DiffSourceFiles = new();
-        foreach (var sourceFile in FileCompareHelper.GetAllFiles(Source))
+        foreach (var sourceFile in FileCompareHelper.GetAllFiles(Source).Where(f => !OnExclusionList(f)))
         {
           
             FilesPair fp = new (sourceFile, FileCompareHelper.DiffDriveFilename(Dest, sourceFile));
@@ -112,7 +112,7 @@ public class EncoreFileManager
 
         DiffDestFiles = new();
         var lonelyDestFolders = LonelyDestFolders.Select(fp => fp.Dest).ToArray();
-        foreach (var destFile in FileCompareHelper.GetAllFiles(Dest))
+        foreach (var destFile in FileCompareHelper.GetAllFiles(Dest).Where(f=>!OnExclusionList(f)))
         {
             FilesPair filePair = new (FileCompareHelper.DiffDriveFilename(Source, destFile), destFile);
             if (!filePair.IsSameSize)//IsSame(true, 2000000000))
@@ -126,7 +126,7 @@ public class EncoreFileManager
 
         LonelyDestFolders = new();
            
-        foreach (var destFolder in FileCompareHelper.GetAllFolders(Dest))
+        foreach (var destFolder in FileCompareHelper.GetAllFolders(Dest).Where(f => !OnExclusionList(f)))
         {
             FoldersPair folderPair = new (FileCompareHelper.DiffDriveFilename(Source, destFolder), destFolder,determineFolderSize);
                 
@@ -135,12 +135,14 @@ public class EncoreFileManager
         }
     }
 
+    private bool OnExclusionList(string folder) => folder.Contains("\\PC") || folder.Contains("\\Videos") || folder.Contains("\\Games");
+
     private void DetermineLonelySourceFolders(bool determineFolderSize)
     {
         LogInfo("Determine all source folders that have no matching dest folders.");
 
         LonelySourceFolders = new();
-        foreach (var sourceFolder in FileCompareHelper.GetAllFolders(Source))
+        foreach (var sourceFolder in FileCompareHelper.GetAllFolders(Source).Where(f=>!OnExclusionList(f)))
         {
             FoldersPair folderPair = new (sourceFolder, FileCompareHelper.DiffDriveFilename(Dest, sourceFolder), determineFolderSize);
             if (!folderPair.BothExist())
