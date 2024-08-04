@@ -1,4 +1,6 @@
-﻿namespace Encore.Helpers;
+﻿using Encore.Railway;
+
+namespace Encore.Helpers;
 public class ProgressManager
 {
     public IProgress<int> Progress { get; set; } = new Progress<int>();
@@ -27,6 +29,19 @@ public class ProgressManager
 
         double fraction = CurrentCount_ / (double)TotalCount_;
         UpdateProgress((fraction * (double)CurrentRange_) + StartPos_);
+    }
+
+    public async Task<Result<int>> UpdateProgressBar(double currentPos)
+    {
+        CurrentPos_ = currentPos;
+        CurrentPos_ = Math.Min(100, CurrentPos_);
+
+        if (CurrentPosInt_ != (int)CurrentPos_)
+        {
+            CurrentPosInt_ = (int)CurrentPos_;
+            await Task.Run(() => Progress.Report(CurrentPosInt_));
+        }
+        return Result<int>.Success(42);
     }
 
     public void UpdateProgress(double currentPos)

@@ -1,6 +1,19 @@
-﻿namespace Storage;
+﻿using System.IO;
+
+namespace Storage;
 public static class FileCompareHelper
 {
+    public static async Task<IEnumerable<string>> GetAllFoldersAsync(string path)
+    {
+        return await Task.Run(() => Directory.EnumerateDirectories(path, "*", new EnumerationOptions
+        {
+            IgnoreInaccessible = true,
+            RecurseSubdirectories = true
+        }));
+    }
+
+  
+
     public static IEnumerable<string> GetAllFolders(string folder) => Directory.EnumerateDirectories(folder, "*", new EnumerationOptions
     {
         IgnoreInaccessible = true,
@@ -12,6 +25,17 @@ public static class FileCompareHelper
         IgnoreInaccessible = true,
         RecurseSubdirectories = true
     });
+
+    public static async Task<IEnumerable<string>> GetAllFilesAsync(string folder){
+
+        return await Task.Run(() => Directory.EnumerateFiles(folder, "*", new EnumerationOptions
+        {
+            IgnoreInaccessible = true,
+            RecurseSubdirectories = true
+        }));
+        
+    }
+      
 
     public static IEnumerable<string> GetAllFiles(string folder, string[] toIgnore) => 
         Directory.EnumerateFiles(folder, "*.*", new EnumerationOptions

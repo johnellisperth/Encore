@@ -5,10 +5,11 @@ using Storage;
 using Encore.Validation;
 
 namespace Encore.Services;
-public class BackupService 
+public class BackupService
 {
-    private readonly EncoreFileManager EncoreFileManager_;
-    private readonly SourceDestValidator Validator_;
+    readonly ILogger Log_;
+    readonly EncoreFileManager EncoreFileManager_;
+    readonly SourceDestValidator Validator_;
 
     public static Models.DriveInfo[] DrivesInfo
     {
@@ -20,9 +21,7 @@ public class BackupService
     public List<Models.DriveInfo> AvailableDestDriveList = new() { new Models.DriveInfo() };
     public string Source { get; set; } = string.Empty;
     public string Dest { get; set; } = string.Empty;
-    public  ProgressManager ProgressManager_;
-
-    private readonly ILogger Log_;
+    public ProgressManager ProgressManager_;
 
     public BackupService(ILogger<BackupService> logger, EncoreFileManager encoreFileManager, SourceDestValidator validator, ProgressManager progressManager)
     {
@@ -68,7 +67,7 @@ public class BackupService
     {
         Log_.LogInformation($"Begin backing up of {Source} onto {Dest}");
         EncoreFileManager_.SetSourceDest(Source, Dest);
-        await Task.Run(() => EncoreFileManager_.PerformEcho(false));
+        await Task.Run(() => EncoreFileManager_.PerformEcho());
         Log_.LogInformation($"Finsihed backing up {Source} onto {Dest}");
     }
 
@@ -76,17 +75,17 @@ public class BackupService
     {
         Log_.LogInformation($"Begin comparing betwenn {Source} and {Dest}");
         EncoreFileManager_.SetSourceDest(Source, Dest);
-        await Task.Run(() => EncoreFileManager_.PerformEcho(true));
+        await Task.Run(() => EncoreFileManager_.PerformPreviewComparison());
         Log_.LogInformation($"Finsihed comparing betwenn {Source} and {Dest}");
     }
 
-    public async Task PerformPreviewOrBackupAsync(bool preview)
+   /* public async Task PerformPreviewOrBackupAsync(bool preview)
     {
         string previewString = preview ? "preview " : "";
         Log_.LogInformation($"Performing backup {previewString}of {Source} onto {Dest}");
         EncoreFileManager_.SetSourceDest(Source, Dest);
         await Task.Run(() => EncoreFileManager_.PerformEcho(preview));
         Log_.LogInformation($"Finsihed performing backup {previewString}of {Source} onto {Dest}");
-    }
+    }*/
 }
 
